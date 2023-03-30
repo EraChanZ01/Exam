@@ -4,21 +4,32 @@ import CONSTANTS from '../../constants';
 import CustomerDashboard from '../../components/CustomerDashboard/CustomerDashboard';
 import CreatorDashboard from '../../components/CreatorDashboard/CreatorDashboard';
 import Header from '../../components/Header/Header';
+import { Redirect } from 'react-router-dom';
 
 const Dashboard = props => {
-  const { role, history } = props;
+  const { role, history, error } = props;
   return (
+
     <div>
-      <Header />
-      {role === CONSTANTS.CUSTOMER ? (
-        <CustomerDashboard history={history} match={props.match} />
-      ) : (
-        <CreatorDashboard history={history} match={props.match} />
-      )}
+      {error ? <Redirect to="/login" /> :
+        <>
+          <Header />
+          {role === CONSTANTS.CUSTOMER ? (
+            <CustomerDashboard history={history} match={props.match} />
+          ) : (
+            <CreatorDashboard history={history} match={props.match} />
+          )}
+        </>
+      }
     </div>
   );
 };
+/*
 
-const mapStateToProps = state => state.userStore.data;
+*/
+
+const mapStateToProps = (state) => {
+  return { ...state.userStore }
+}
 
 export default connect(mapStateToProps)(Dashboard);
