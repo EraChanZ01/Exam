@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header';
 import { Redirect } from 'react-router-dom';
 
 const Dashboard = props => {
-  const { role, history, error } = props;
+  const { data:{role}, history, error } = props;
   return (
 
     <div>
