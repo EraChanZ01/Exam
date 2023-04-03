@@ -23,6 +23,7 @@ const ChatInput = (props) => {
         onSubmit={submitHandler}
         initialValues={{ message: '' }}
         validationSchema={Schems.MessageSchema}
+        validateOnBlur={false}
       >
         <Form className={styles.form}>
           <FormInput

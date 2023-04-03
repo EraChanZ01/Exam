@@ -3,7 +3,6 @@
   justify-content: flex-start
   align-items: center
   border-top: 1px solid #f3f3f3
-  padding: 0 15px
   margin-top: 8px
   padding-top: 7px
 
@@ -15,12 +14,15 @@
   .form
     position: relative
     display: flex
+    width: 100%
     flex-direction: row
     justify-content: space-between
     align-items: center
 
     button
-      position: relative
+      position: absolute
+      right: 15px
+      top: 2px
       padding: 0
       border: none
       background-color: white
@@ -28,20 +30,15 @@
       cursor: pointer
 
     img
-      position: absolute
-      bottom: -20px
-      right: -23px
       cursor: pointer
       transition: transform 0.2s ease
-      transform: rotate(150deg)
 
       &:hover
         width: 35px
         height: 35px
 
     .container
-      display: flex
-      padding: 0 15px
+      padding: 0 15px 5px 15px
       justify-content: flex-start
       align-items: center
 
