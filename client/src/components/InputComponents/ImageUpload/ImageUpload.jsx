@@ -12,7 +12,7 @@ const ImageUpload = props => {
     if (!file.type.match(imageType)) {
       e.target.value = '';
     } else {
-      field.onChange(file);
+      helpers.setValue(file);
       const reader = new FileReader();
       reader.onload = () => {
         node.src = reader.result;
@@ -25,10 +25,10 @@ const ImageUpload = props => {
       <div className={inputContainer}>
         <span>Support only images (*.png, *.gif, *.jpeg)</span>
         <input
-          {...field}
           id='fileInput'
-          type='file'
           accept='.jpg, .png, .jpeg'
+          type='file'
+          {...field.restField}
           onChange={onChange}
         />
         <label htmlFor='fileInput'>Chose file</label>

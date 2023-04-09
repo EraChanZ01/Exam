@@ -56,7 +56,7 @@ module.exports.registration = async (req, res, next) => {
   }
 };
 
-function getQuery (offerId, userId, mark, isFirst, transaction) {
+function getQuery(offerId, userId, mark, isFirst, transaction) {
   const getCreateQuery = () => ratingQueries.createRating({
     offerId,
     mark,
@@ -89,7 +89,7 @@ module.exports.changeMark = async (req, res, next) => {
       transaction,
     });
     for (let i = 0; i < offersArray.length; i++) {
-      sum += offersArray[ i ].dataValues.mark;
+      sum += offersArray[i].dataValues.mark;
     }
     avg = sum / offersArray.length;
 
@@ -110,22 +110,22 @@ module.exports.payment = async (req, res, next) => {
     await bankQueries.updateBankBalance({
       balance: bd.sequelize.literal(`
                 CASE
-            WHEN "cardNumber"='${ req.body.number.replace(/ /g,
-    '') }' AND "cvc"='${ req.body.cvc }' AND "expiry"='${ req.body.expiry }'
-                THEN "balance"-${ req.body.price }
-            WHEN "cardNumber"='${ CONSTANTS.SQUADHELP_BANK_NUMBER }' AND "cvc"='${ CONSTANTS.SQUADHELP_BANK_CVC }' AND "expiry"='${ CONSTANTS.SQUADHELP_BANK_EXPIRY }'
-                THEN "balance"+${ req.body.price } END
+            WHEN "cardNumber"='${req.body.number.replace(/ /g,
+        '')}' AND "cvc"='${req.body.cvc}' AND "expiry"='${req.body.expiry}'
+                THEN "balance"-${req.body.price}
+            WHEN "cardNumber"='${CONSTANTS.SQUADHELP_BANK_NUMBER}' AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}' AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}'
+                THEN "balance"+${req.body.price} END
         `),
     },
-    {
-      cardNumber: {
-        [ bd.Sequelize.Op.in ]: [
-          CONSTANTS.SQUADHELP_BANK_NUMBER,
-          req.body.number.replace(/ /g, ''),
-        ],
+      {
+        cardNumber: {
+          [bd.Sequelize.Op.in]: [
+            CONSTANTS.SQUADHELP_BANK_NUMBER,
+            req.body.number.replace(/ /g, ''),
+          ],
+        },
       },
-    },
-    transaction);
+      transaction);
     const orderId = uuid();
     req.body.contests.forEach((contest, index) => {
       const prize = index === req.body.contests.length - 1 ? Math.ceil(
@@ -154,18 +154,17 @@ module.exports.updateUser = async (req, res, next) => {
     if (req.file) {
       req.body.avatar = req.file.filename;
     }
-    const updatedUser = await userQueries.updateUser(req.body,
+    const accessToken = jwt.sign(Object.assign({
+      userId: req.tokenData.userId,
+      role: req.tokenData.role,
+      avatar: req.tokenData.avatar,
+      balance: req.tokenData.balance,
+      email: req.tokenData.email,
+      rating: req.tokenData.rating,
+    }, req.body), CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
+    const updatedUser = await userQueries.updateUser(jwt.verify(accessToken, CONSTANTS.JWT_SECRET),
       req.tokenData.userId);
-    res.send({
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      displayName: updatedUser.displayName,
-      avatar: updatedUser.avatar,
-      email: updatedUser.email,
-      balance: updatedUser.balance,
-      role: updatedUser.role,
-      id: updatedUser.id,
-    });
+    res.send({...updatedUser, token: accessToken });
   } catch (err) {
     next(err);
   }
@@ -180,23 +179,23 @@ module.exports.cashout = async (req, res, next) => {
       req.tokenData.userId, transaction);
     await bankQueries.updateBankBalance({
       balance: bd.sequelize.literal(`CASE 
-                WHEN "cardNumber"='${ req.body.number.replace(/ /g,
-    '') }' AND "expiry"='${ req.body.expiry }' AND "cvc"='${ req.body.cvc }'
-                    THEN "balance"+${ req.body.sum }
-                WHEN "cardNumber"='${ CONSTANTS.SQUADHELP_BANK_NUMBER }' AND "expiry"='${ CONSTANTS.SQUADHELP_BANK_EXPIRY }' AND "cvc"='${ CONSTANTS.SQUADHELP_BANK_CVC }'
-                    THEN "balance"-${ req.body.sum }
+                WHEN "cardNumber"='${req.body.number.replace(/ /g,
+        '')}' AND "expiry"='${req.body.expiry}' AND "cvc"='${req.body.cvc}'
+                    THEN "balance"+${req.body.sum}
+                WHEN "cardNumber"='${CONSTANTS.SQUADHELP_BANK_NUMBER}' AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}' AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}'
+                    THEN "balance"-${req.body.sum}
                  END
                 `),
     },
-    {
-      cardNumber: {
-        [ bd.Sequelize.Op.in ]: [
-          CONSTANTS.SQUADHELP_BANK_NUMBER,
-          req.body.number.replace(/ /g, ''),
-        ],
+      {
+        cardNumber: {
+          [bd.Sequelize.Op.in]: [
+            CONSTANTS.SQUADHELP_BANK_NUMBER,
+            req.body.number.replace(/ /g, ''),
+          ],
+        },
       },
-    },
-    transaction);
+      transaction);
     transaction.commit();
     res.send({ balance: updatedUser.balance });
   } catch (err) {
