@@ -1,5 +1,5 @@
 const db = require('../models');
-const ServerError =require('../errors/ServerError');
+const ServerError = require('../errors/ServerError');
 const contestQueries = require('./queries/contestQueries');
 const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
@@ -15,7 +15,7 @@ module.exports.dataForContest = async (req, res, next) => {
     const characteristics = await db.Selects.findAll({
       where: {
         type: {
-          [ db.Sequelize.Op.or ]: types,
+          [db.Sequelize.Op.or]: types,
         },
       },
     });
@@ -23,14 +23,13 @@ module.exports.dataForContest = async (req, res, next) => {
       return next(new ServerError());
     }
     characteristics.forEach(characteristic => {
-      if (!response[ characteristic.type ]) {
-        response[ characteristic.type ] = [];
+      if (!response[characteristic.type]) {
+        response[characteristic.type] = [];
       }
-      response[ characteristic.type ].push(characteristic.describe);
+      response[characteristic.type].push(characteristic.describe);
     });
     res.send(response);
   } catch (err) {
-    console.log(err);
     next(new ServerError('cannot get contest preferences'));
   }
 };
@@ -102,6 +101,19 @@ module.exports.downloadFile = async (req, res, next) => {
   const file = CONSTANTS.CONTESTS_DEFAULT_DIR + req.params.fileName;
   res.download(file);
 };
+module.exports.uploadFiles = async (req, res, next) => {
+  try {
+    const { files } = req
+    const arrayFiles = files.map(file => ({
+       fileName: file.filename,
+       destination: file.destination,
+       originalName:file.originalname
+      }))
+    res.send(arrayFiles)
+  } catch (err) {
+    next(new ServerError());
+  }
+}
 
 module.exports.updateContest = async (req, res, next) => {
   if (req.file) {
@@ -156,10 +168,10 @@ const resolveOffer = async (
   contestId, creatorId, orderId, offerId, priority, transaction) => {
   const finishedContest = await contestQueries.updateContestStatus({
     status: db.sequelize.literal(`   CASE
-            WHEN "id"=${ contestId }  AND "orderId"='${ orderId }' THEN '${ CONSTANTS.CONTEST_STATUS_FINISHED }'
-            WHEN "orderId"='${ orderId }' AND "priority"=${ priority +
-    1 }  THEN '${ CONSTANTS.CONTEST_STATUS_ACTIVE }'
-            ELSE '${ CONSTANTS.CONTEST_STATUS_PENDING }'
+            WHEN "id"=${contestId}  AND "orderId"='${orderId}' THEN '${CONSTANTS.CONTEST_STATUS_FINISHED}'
+            WHEN "orderId"='${orderId}' AND "priority"=${priority +
+      1}  THEN '${CONSTANTS.CONTEST_STATUS_ACTIVE}'
+            ELSE '${CONSTANTS.CONTEST_STATUS_PENDING}'
             END
     `),
   }, { orderId }, transaction);
@@ -168,8 +180,8 @@ const resolveOffer = async (
     creatorId, transaction);
   const updatedOffers = await contestQueries.updateOfferStatus({
     status: db.sequelize.literal(` CASE
-            WHEN "id"=${ offerId } THEN '${ CONSTANTS.OFFER_STATUS_WON }'
-            ELSE '${ CONSTANTS.OFFER_STATUS_REJECTED }'
+            WHEN "id"=${offerId} THEN '${CONSTANTS.OFFER_STATUS_WON}'
+            ELSE '${CONSTANTS.OFFER_STATUS_REJECTED}'
             END
     `),
   }, {
@@ -187,7 +199,7 @@ const resolveOffer = async (
     'Someone of yours offers was rejected', contestId);
   controller.getNotificationController().emitChangeOfferStatus(creatorId,
     'Someone of your offers WIN', contestId);
-  return updatedOffers[ 0 ].dataValues;
+  return updatedOffers[0].dataValues;
 };
 
 module.exports.setOfferStatus = async (req, res, next) => {

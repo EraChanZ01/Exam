@@ -29,10 +29,16 @@ router.post(
 );
 
 router.post(
+  '/uploadFiles',
+  checkToken.checkToken,
+  upload.uploadContestFiles,
+  contestController.uploadFiles
+)
+
+router.post(
   '/pay',
   checkToken.checkToken,
   basicMiddlewares.onlyForCustomer,
-  upload.uploadContestFiles,
   basicMiddlewares.parseBody,
   validators.validateContestCreation,
   userController.payment,
@@ -70,10 +76,10 @@ router.get(
 );
 
 router.post(
-  '/updateContest',
+  '/updateContestFiles',
   checkToken.checkToken,
-  upload.updateContestFile,
-  contestController.updateContest,
+  upload.uploadContestFiles,
+  contestController.uploadFiles,
 );
 
 router.post(

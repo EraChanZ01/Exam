@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import styles from './ContestCreationPage.module.sass';
-import { saveContestToStore } from '../../store/slices/contestCreationSlice';
+import { saveContestToStore, saveContestFiles } from '../../store/slices/contestCreationSlice';
 import NextButton from '../../components/NextButton/NextButton';
 import ContestForm from '../../components/ContestForm/ContestForm';
 import BackButton from '../../components/BackButton/BackButton';
@@ -16,7 +16,18 @@ const ContestCreationPage = (props) => {
     : { contestType: props.contestType };
 
   const handleSubmit = (values) => {
-    props.saveContest({ type: props.contestType, info: values });
+    const info = {}
+    for (let prop in values) {
+      if (prop != 'file') {
+        info[prop] = values[prop]
+      }
+      else {
+        const data = new FormData()
+        data.append('files', values[prop]);
+        props.saveContestFiles(data)
+      }
+    }
+    props.saveContest({ type: props.contestType, info });
     const route =
       props.bundleStore.bundle[props.contestType] === 'payment'
         ? '/payment'
@@ -75,6 +86,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   saveContest: (data) => dispatch(saveContestToStore(data)),
+  saveContestFiles: (data) => dispatch(saveContestFiles(data))
 });
 
 export default connect(

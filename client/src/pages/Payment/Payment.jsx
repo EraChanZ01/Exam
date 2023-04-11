@@ -14,21 +14,16 @@ const Payment = (props) => {
     Object.keys(contests).forEach((key) =>
       contestArray.push({ ...contests[key] })
     );
-    const { number, expiry, cvc } = values;
-    const data = new FormData();
     for (let i = 0; i < contestArray.length; i++) {
-      data.append('files', contestArray[i].file);
-      contestArray[i].haveFile = !!contestArray[i].file;
+      contestArray[i].haveFile = !!contestArray[i].files;
     }
-    data.append('number', number);
-    data.append('expiry', expiry);
-    data.append('cvc', cvc);
-    data.append('contests', JSON.stringify(contestArray));
-    data.append('price', '100');
+    const data = {
+      ...values,
+      contests: JSON.stringify(contestArray),
+      price:'100'
+    }
     props.pay({
-      data: {
-        formData: data,
-      },
+      data,
       history: props.history,
     });
   };

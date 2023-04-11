@@ -42,7 +42,14 @@ module.exports.uploadAvatar = async (req, res, next) => {
   });
 
 }
-module.exports.uploadContestFiles = uploadFile.array('files', 3);
+module.exports.uploadContestFiles = async (req, res, next) => {
+  uploadFile.array('files', 3)(req, res, (err) => {
+    if (err) {
+      return next(new ServerError('Invalid file'))
+    }
+    return next()
+  });
+}
 module.exports.updateContestFile = uploadFile.single('file');
 module.exports.uploadLogoFiles = uploadFile.single('offerData');
 
