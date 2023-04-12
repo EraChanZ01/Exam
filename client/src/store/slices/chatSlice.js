@@ -348,7 +348,6 @@ const reducers = {
     state.chatData = payload.conversationData;
     state.isShow = true;
     state.isExpanded = true;
-    state.messages = [];
   },
 
   clearMessageList: state => {
