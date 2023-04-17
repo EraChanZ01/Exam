@@ -1,0 +1,50 @@
+
+.card
+  margin-bottom: 15px
+  font-size: 17px
+  .cardSection
+    margin-bottom: 5px
+    border: 1px solid rgb(207, 207, 207)
+    border-radius: 0px 0px 5px 5px
+    max-height: 0
+    transition: 0.3s ease-in-out
+    overflow: hidden
+    .cardBody
+      padding: 21px
+      line-height: 25px
+      font-weight: 400
+
+      p
+        padding: 5px
+      .listAnswer
+        list-style: inside
+        padding-left: 25px
+        text-indent: -23px
+        margin-bottom: 10px
+  .Question
+    display: flex
+    justify-content: space-between
+    align-items: center
+    border: 1px solid rgb(207, 207, 207)
+    border-radius: 5px 5px 0px 0px
+    padding: 15px
+
+    .small
+      transition: 0.3s ease-in-out
+
+    .small:before
+      content: "\f061"
+      color: rgb(89, 117, 255)
+
+    .cardButton
+      background-color: white
+      border: none
+
+.card:hover
+  transition: 0.5s ease-out
+  background-color: #f8fafd
+
+  .cardButton
+    transition: 0.5s ease-out
+    color: rgb(89, 117, 255)
+    background-color: #f8fafd
