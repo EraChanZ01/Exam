@@ -103,7 +103,7 @@ const EventsPage = props => {
         intervalId = setInterval(() => {
             renderTimeAndStyle()
             sortEvent([...props.eventStore])
-        }, 5000)
+        }, 60000)
     }, [])
     return (
         <div className={styles.eventPage}>
