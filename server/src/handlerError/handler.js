@@ -1,4 +1,16 @@
+const fs = require("fs")
+
 module.exports = (err, req, res, next) => {
+  const logData = {
+    message: err.message,
+    time: Date.now(),
+    code: err.code,
+    stackTrace: err.stack
+  };
+  fs.appendFile("Error.log",JSON.stringify(logData) , (err) => {
+    if (err) throw err
+  })
+
   if (err.message ===
     'new row for relation "Banks" violates check constraint "Banks_balance_ck"' ||
     err.message ===
@@ -7,10 +19,8 @@ module.exports = (err, req, res, next) => {
     err.code = 406;
   }
   if (!err.message || !err.code) {
-    console.log(err)
     res.status(500).send('Server Error');
   } else {
-    console.log(err)
     res.status(err.code).send(err.message);
   }
 };
