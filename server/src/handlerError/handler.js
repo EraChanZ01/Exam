@@ -5,11 +5,12 @@ module.exports = (err, req, res, next) => {
     message: err.message,
     time: Date.now(),
     code: err.code,
-    stackTrace: err.stack
+    stackTrace: { error: err.stack }
   };
-  fs.appendFile("Error.log",JSON.stringify(logData) , (err) => {
-    if (err) throw err
-  })
+  fs.appendFile("error.log", JSON.stringify(logData) + '\n',
+    (err) => {
+      if (err) throw err
+    })
 
   if (err.message ===
     'new row for relation "Banks" violates check constraint "Banks_balance_ck"' ||
