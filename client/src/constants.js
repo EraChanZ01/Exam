@@ -4,6 +4,7 @@ const serverPort = 3000;
 export default {
   CUSTOMER: 'customer',
   CREATOR: 'creator',
+  MODERATOR: 'moderator',
   CONTEST_STATUS_ACTIVE: 'active',
   CONTEST_STATUS_FINISHED: 'finished',
   CONTEST_STATUS_PENDING: 'pending',
@@ -13,6 +14,7 @@ export default {
   OFFER_STATUS_REJECTED: 'rejected',
   OFFER_STATUS_WON: 'won',
   OFFER_STATUS_PENDING: 'pending',
+  OFFER_STATUS_RESOLVE: 'resolve',
   STATIC_IMAGES_PATH: '/staticImages/',
   ANONYM_IMAGE_PATH: '/staticImages/anonym.png',
   BASE_URL: `http://${serverIP}:${serverPort}/`,
