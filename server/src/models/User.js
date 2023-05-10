@@ -4,15 +4,27 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      console.log(models)
-      /*
-      User.hasMany(models.Order, {
-        foreignKey: 'user_id', targetKey: 'id'
+      User.hasMany(models.Messages, {
+        foreignKey: 'sender', sourceKey: 'id'
       });
-      User.hasMany(models.RefreshToken, {
-        foreignKey: 'user_id', targetKey: 'id'
+      User.belongsToMany(models.Conversations, {
+        through: 'UsersInConversations'
+      })
+      User.hasMany(models.Catalogs, {
+        foreignKey: 'userId', sourceKey: 'id'
       });
-      */
+      User.hasMany(models.BlackLists, {
+        foreignKey: 'userId', targetKey: 'id'
+      });
+      User.hasMany(models.BlackLists, {
+        foreignKey: 'blockedUserId', targetKey: 'id'
+      });
+      User.hasMany(models.FavoriteLists, {
+        foreignKey: 'userId', sourceKey: 'id'
+      });
+      User.hasMany(models.FavoriteLists, {
+        foreignKey: 'FavoritUserId', sourceKey: 'id'
+      });
       User.hasMany(models.Ratings, {
         foreignKey: 'userId', targetKey: 'id'
       });
