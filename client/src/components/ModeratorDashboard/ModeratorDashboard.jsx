@@ -12,9 +12,9 @@ import classNames from 'classnames';
 
 const ModeratorDashboard = props => {
 
-    //useEffect(() => {
-       // getOffers(props.offers.data.length)
-    //}, [])
+    useEffect(() => {
+        getOffers(props.offers.data.length)
+    }, [])
 
     const getOffers = (startFrom) => {
         props.getOffers({
@@ -100,21 +100,24 @@ const ModeratorDashboard = props => {
     }
     return (
         <div className={styles.moderatorDashboard}>
-            <div className={styles.filter}>
 
-            </div>
-            <div className={styles.containerOffers}>
-                {renderOffers()}
-                <button onClick={() => getOffers(props.offers.data.length)}>More</button>
-            </div>
+            <>
+                <div className={styles.filter}>
+
+                </div>
+                <div className={styles.containerOffers}>
+                    {renderOffers()}
+                    <button onClick={() => getOffers(props.offers.data.length)}>More</button>
+                </div>
+            </>
 
         </div>
     )
 }
 
 const mapStateToProps = (state) => {
-    const { contestsList, offers } = state;
-    return { ...contestsList, offers };
+    const { offers } = state;
+    return { offers };
 };
 
 const mapDispatchToProps = (dispatch) => ({

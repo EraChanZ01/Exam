@@ -42,17 +42,22 @@ export const setOfferModerStatus = decorateAsyncThunk({
 
 const extraReducers = builder => {
     builder.addCase(getOffers.fulfilled, (state, { payload }) => {
-        console.log(state,payload)
+        state.isFetching = false
         state.data = [...state.data, ...payload]
         state.error = null;
     });
     builder.addCase(getOffers.rejected, (state, { payload }) => {
         state.error = payload;
     });
+    builder.addCase(setOfferModerStatus.pending, (state, { payload }) => {
+        state.isFetching = true;
+    })
     builder.addCase(setOfferModerStatus.fulfilled, (state, { payload }) => {
+        state.isFetching = false
+        state.error = null
         state.data.forEach(offer => {
-            if (offer.id === payload.id) {
-                return offer.status = payload.status
+            if (offer.id === payload.offer.id) {
+                return offer.status = payload.offer.status
             }
             return
         })

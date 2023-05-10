@@ -316,15 +316,20 @@ module.exports.setOfferModerStatus = async (req, res, next) => {
     try {
       const resolveOffer = await contestQueries.updateOffer(
         { status: CONSTANTS.OFFER_STATUS_RESOLVE }, { id: req.body.offerId });
-      res.send(resolveOffer);
+      const user = await userQueries.findUser({ id: req.body.creatorId });
+      controller.getNotificationController().emitChangeOfferStatus(req.body.creatorId, 'Someone of your offers WIN', req.body.contestId);
+      await userQueries.sendEmail(user.email, "moderator resolve your offer", "Squadhelp <michaela99@ethereal.email>")
+      res.send({ offer: resolveOffer, user })
     } catch (err) {
-
+      next(new ServerError(err))
     }
   } else if (req.body.status === CONSTANTS.OFFER_STATUS_REJECTED) {
     try {
       const offer = await rejectOffer(req.body.offerId, req.body.creatorId,
         req.body.contestId);
-      res.send(offer);
+      const user = await userQueries.findUser({ id: req.body.creatorId });
+      await userQueries.sendEmail(user.email, "moderator rejected your offer", "Squadhelp <michaela99@ethereal.email>")
+      res.send({ offer, user })
     } catch (err) {
       next(new ServerError(err))
     }

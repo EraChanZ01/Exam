@@ -2,6 +2,7 @@ const bd = require('../../models');
 const NotFound = require('../../errors/UserNotFoundError');
 const ServerError = require('../../errors/ServerError');
 const bcrypt = require('bcrypt');
+const { mailer } = require('../../utils/Mail')
 
 module.exports.updateUser = async (data, userId, transaction) => {
   const [updatedCount, [updatedUser]] = await bd.Users.update(data,
@@ -36,3 +37,11 @@ module.exports.passwordCompare = async (pass1, pass2) => {
     throw new NotFound('Wrong password');
   }
 };
+module.exports.sendEmail = async (email, text, subject) => {
+  const message = {
+    to: email,
+    subject: subject,
+    text: text
+  }
+  await mailer(message)
+}
