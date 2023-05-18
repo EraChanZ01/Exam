@@ -6,10 +6,12 @@ CREATE TABLE "Conversations" (
 );
 CREATE TABLE "UsersInConversations" (
     userId int NOT NULL,
-    ConversationId int NOT NULL,
-    PRIMARY KEY (userId, ConversationId),
+    conversationId int NOT NULL,
+    createdAt date NOT NULL,
+    updatedAt date NOT NULL,
+    PRIMARY KEY (userId, conversationId),
     FOREIGN KEY (userId) REFERENCES public."Users"(id),
-    FOREIGN KEY (ConversationId) REFERENCES public."Conversations"(id)
+    FOREIGN KEY (conversationId) REFERENCES public."Conversations"(id)
 );
 CREATE TABLE "Catalogs" (
     id bigserial NOT NULL,
@@ -19,25 +21,25 @@ CREATE TABLE "Catalogs" (
     FOREIGN KEY (userId) REFERENCES public."Users"(id)
 );
 CREATE TABLE "ConversationsInCatalogs"(
-    CatalogId int NOT NULL,
-    ConversationId int NOT NULL,
-    PRIMARY KEY (CatalogId, ConversationId),
+    catalogId int NOT NULL,
+    conversationId int NOT NULL,
+    PRIMARY KEY (catalogId, conversationId),
     FOREIGN KEY (CatalogId) REFERENCES public."Catalogs"(id),
-    FOREIGN KEY (ConversationId) REFERENCES public."Conversations"(id)
+    FOREIGN KEY (conversationId) REFERENCES public."Conversations"(id) ON DELETE CASCADE
 );
 CREATE TABLE "BlackLists" (
     userId int NOT NULL,
-    blockedUserId int NOT NULL,
-    PRIMARY KEY (userId),
-    FOREIGN KEY (userId) REFERENCES  public."Users"(id),
-    FOREIGN KEY (blockedUserId) REFERENCES  public."Users"(id)
+    participantId int NOT NULL,
+    PRIMARY KEY (userId, participantId),
+    FOREIGN KEY (userId) REFERENCES public."Users"(id),
+    FOREIGN KEY (participantId) REFERENCES public."Users"(id)
 );
 CREATE TABLE "FavoriteLists" (
     userId int NOT NULL,
-    FavoritUserId int NOT NULL,
-    PRIMARY KEY (userId),
-    FOREIGN KEY (userId) REFERENCES  public."Users"(id),
-    FOREIGN KEY (FavoritUserId) REFERENCES  public."Users"(id)
+    participantId int NOT NULL,
+    PRIMARY KEY (userId, participantId),
+    FOREIGN KEY (userId) REFERENCES public."Users"(id),
+    FOREIGN KEY (participantId) REFERENCES public."Users"(id)
 );
 CREATE TABLE "Messages" (
     id bigserial NOT NULL,
@@ -50,4 +52,3 @@ CREATE TABLE "Messages" (
     FOREIGN KEY (sender) REFERENCES public."Users"(id),
     FOREIGN KEY (conversationId) REFERENCES public."Conversations"(id)
 );
-
