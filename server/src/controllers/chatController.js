@@ -99,8 +99,8 @@ module.exports.getChat = async (req, res, next) => {
         },
       ],
     });
-    const interlocutor = await userQueries.findUser({ where: { id: req.body.interlocutorId } });
-
+    const interlocutor = await userQueries.findUser(req.body.interlocutorId);
+    console.log(conversation)
     if (conversation && conversation.Users.length === 2) {
       messages = await db.Messages.findAll({
         where: {
