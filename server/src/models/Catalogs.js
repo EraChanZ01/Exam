@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId', sourceKey: 'id'
             });
             Catalog.belongsToMany(models.Conversations, {
-                through: 'ConversationsInCatalogs'
+                through: 'ConversationsInCatalogs', foreignKey: 'catalogId', onDelete: 'CASCADE',
             })
         }
     }

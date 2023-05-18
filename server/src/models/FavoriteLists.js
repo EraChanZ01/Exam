@@ -4,12 +4,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     class FavoriteList extends Model {
         static associate(models) {
-            FavoriteList.belongsTo(models.Users, {
-                foreignKey: 'userId', sourceKey: 'id'
-            });
-            FavoriteList.belongsTo(models.Users, {
-                foreignKey: 'FavoritUserId', sourceKey: 'id'
-            });
         }
     }
     FavoriteList.init(
@@ -18,10 +12,18 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.INTEGER,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
             },
-            FavoritUserId: {
+            participantId: {
                 allowNull: false,
                 type: DataTypes.INTEGER,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
             },
         },
         {

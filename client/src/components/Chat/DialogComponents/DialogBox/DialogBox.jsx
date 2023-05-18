@@ -19,7 +19,7 @@ const DialogBox = props => {
     favoriteList,
     participants,
     blackList,
-    _id,
+    conversationId,
     text,
     createAt,
   } = chatPreview;
@@ -33,7 +33,7 @@ const DialogBox = props => {
           interlocutor,
           conversationData: {
             participants,
-            _id,
+            conversationId,
             blackList,
             favoriteList,
           },
@@ -88,7 +88,7 @@ const DialogBox = props => {
             })}
           />
           <i
-            onClick={event => catalogOperation(event, _id)}
+            onClick={event => catalogOperation(event, conversationId)}
             className={classNames({
               'far fa-plus-square':
                 chatMode !== CONSTANTS.CATALOG_PREVIEW_CHAT_MODE,

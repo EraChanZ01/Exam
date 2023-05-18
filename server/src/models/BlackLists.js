@@ -4,12 +4,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     class BlackList extends Model {
         static associate(models) {
-            BlackList.belongsTo(models.Users, {
-                foreignKey: 'userId', sourceKey: 'id'
-            });
-            BlackList.belongsTo(models.Users, {
-                foreignKey: 'blockedUserId', sourceKey: 'id'
-            });
         }
     }
     BlackList.init(
@@ -18,10 +12,18 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.INTEGER,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
             },
-            blockedUserId: {
+            participantId: {
                 allowNull: false,
                 type: DataTypes.INTEGER,
+                references: {
+                    model: 'Users',
+                    key: 'id',
+                },
             },
         },
         {

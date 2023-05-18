@@ -13,7 +13,8 @@ module.exports = {
             tableName: "Catalogs",
             key: "id"
           }
-        }
+        },
+        onDelete: 'CASCADE'
       },
       conversationId: {
         allowNull: false,
@@ -24,9 +25,21 @@ module.exports = {
             tableName: "Conversations",
             key: "id"
           }
-        }
+        },
+        onDelete: 'CASCADE'
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       }
-    });
+
+    }, {
+      timestamps: false
+    },);
   },
 
   down: async (queryInterface, Sequelize) => {

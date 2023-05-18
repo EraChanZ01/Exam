@@ -1,10 +1,9 @@
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('BlackList', {
-            id: {
+        return queryInterface.createTable('BlackLists', {
+            userId: {
                 allowNull: false,
-                autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
                 references: {
@@ -12,8 +11,9 @@ module.exports = {
                     key: 'id',
                 },
             },
-            blockedUserId: {
+            participantId: {
                 allowNull: false,
+                primaryKey: true,
                 type: Sequelize.INTEGER,
                 references: {
                     model: 'Users',
@@ -24,6 +24,6 @@ module.exports = {
         });
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('BlackList');
+        return queryInterface.dropTable('BlackLists');
     },
 };

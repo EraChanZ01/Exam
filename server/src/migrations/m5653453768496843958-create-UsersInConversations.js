@@ -21,6 +21,14 @@ module.exports = {
           model: "Conversations",
           key: "id"
         }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       }
     });
   },

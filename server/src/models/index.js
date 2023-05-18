@@ -12,7 +12,6 @@ const db = {};
 
 const sequelize = new Sequelize(config.database, config.username,
   config.password, config);
-
 fs
   .readdirSync(__dirname)
   .filter((file) => {
