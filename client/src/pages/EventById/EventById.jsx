@@ -115,17 +115,22 @@ const EventById = props => {
                                 el.status === "rejected" ? (
                                     <div className={styles.entrieGradeRed}>
                                         <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cross.png`} />
-                                    </div>) : (null)
+                                    </div>
+                                ) : (
+                                    <div className={styles.entrieGrade}>
+                                    </div>
+                                )
 
                             )}
                         </div>
-                        {props.data.role === CONSTANTS.CUSTOMER ? (el.status === "pending" ? (
+                        {props.data.role === CONSTANTS.CUSTOMER &
+                            props.eventStore[params.id].user.id === props.data.id &
+                            el.status === "pending" ?
                             <div className={styles.solution}>
                                 <button className={styles.resolve} onClick={() => handleClickResolve(el.id)}>Resolve</button>
                                 <button className={styles.reject} onClick={() => handleClickReject(el.id)}>Reject</button>
                             </div>
-                        ) : (null)
-                        ) : (null)
+                            : null
                         }
                     </li>
                 )
@@ -141,13 +146,15 @@ const EventById = props => {
                     <Header />
                     <div className={styles.sectionEntries}>
                         <h1>{props.eventStore[params.id].name}</h1>
-                        {props.data.role === CONSTANTS.CUSTOMER ?
+                        {props.data.role === CONSTANTS.CUSTOMER ||
+                            props.eventStore[params.id].endDateTime <= ~~(Date.now() / 1000) ||
+                            props.eventStore[params.id].startDateTime > ~~(Date.now() / 1000) ?
                             null
                             :
-                            <div className={styles.formEntrie}>
+                            (<div className={styles.formEntrie}>
                                 <input onChange={handleChange} />
                                 <button className={styles.entrieButton} onClick={sendOffer}>Send offer</button>
-                            </div>
+                            </div>)
                         }
                         <div className={styles.containerEntries}>
                             <ul>

@@ -42,6 +42,9 @@
         ul
             width: 100%
             .entrie
+                display: flex
+                justify-content: center
+                flex-direction: column
                 border-radius: 5px
                 background: rgb(244, 244, 244)
                 height: 120px
@@ -72,6 +75,8 @@
                     display: flex
                     justify-content: space-between
                     align-items: center
+
+                    .entrieGrade
                     .entrieGradeRed
                         @extend %entrieGrade
                         background: #ff6a6a

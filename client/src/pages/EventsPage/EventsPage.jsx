@@ -14,6 +14,7 @@ import Spinner from "../../components/Spinner/Spinner"
 const EventsPage = props => {
 
     const [event, setEvent] = useState([])
+    const nowTime = ~~(new Date().getTime() / 1000)
 
     const renderTimeAndStyle = () => {
         if (window.location.pathname != "/events") {
@@ -29,48 +30,37 @@ const EventsPage = props => {
         const renderConponent = (timoutOrMessage, style, component) => {
             const result = timoutOrMessage instanceof Array ? `${timoutOrMessage[0]} day ${timoutOrMessage[1]} hour ${timoutOrMessage[2]} min` : `${timoutOrMessage}`
             component.style.background = style
-            if (component.childNodes[1]) {
-                component.removeChild(component.childNodes[1])
-            }
+            if (component.childNodes[1]) component.removeChild(component.childNodes[1])
             const spanElem = document.createElement('span')
             spanElem.innerHTML = result
             component.append(spanElem)
         }
         const element = [...document.getElementsByClassName("eventLi")]
         if (element.length != 0) {
-            const nowTime = ~~(new Date().getTime() / 1000)
             element.forEach(event => {
                 const { startDateTime, endDateTime } = props.eventStore[event.id]
-                if (endDateTime < nowTime) {
-                    return renderConponent(`${props.eventStore[event.id].entries.length} Entries`, "#FF8587", event)
-                }
-                if (startDateTime > nowTime) {
-                    return renderConponent(subtractTime(startDateTime, nowTime), "#FBFFA3", event)
-                }
+                if (endDateTime < nowTime) return renderConponent(`${props.eventStore[event.id].entries.length} Entries`, "#FF8587", event)
+                if (startDateTime > nowTime) return renderConponent(subtractTime(startDateTime, nowTime), "#FBFFA3", event)
                 if (startDateTime <= nowTime) {
                     const [days, hours, min, result] = subtractTime(endDateTime, nowTime)
-                    const percentComplete = ((endDateTime - (result * 1000)) * 100) / (endDateTime)
+                    const percentComplete = ((nowTime - startDateTime) / (endDateTime - startDateTime)) * 100
                     return renderConponent([days, hours, min, result], `linear-gradient(90deg, #ADFFB3 ${percentComplete}%, #f4f4f4 ${percentComplete}%)`, event)
                 }
             })
         }
-    }   
+    }
     const sortEvent = (arr) => {
-        const newArr = [...arr]
+        const newArr = arr.filter((event) => {
+            if (props.data.id === event.user.id) return true
+            return event.notifiDateTime <= nowTime
+        })
         const timeNow = ~~(Date.now() / 1000)
         newArr.sort((a, b) => {
-            if (a.endDateTime < timeNow && b.endDateTime > timeNow) {
-                return 1
-            }
-            if (a.startDateTime > timeNow && b.startDateTime < timeNow && b.endDateTime > timeNow) {
-                return 1
-            }
-            if (a.endDateTime - timeNow > b.endDateTime - timeNow && b.startDateTime < timeNow && b.endDateTime > timeNow) {
-                return 1
-            }
-            if (a.endDateTime - timeNow > b.endDateTime - timeNow && a.startDateTime > timeNow && b.startDateTime > timeNow) {
-                return 1
-            } else {
+            if (a.endDateTime < timeNow && b.endDateTime > timeNow) return 1
+            if (a.startDateTime > timeNow && b.startDateTime < timeNow && b.endDateTime > timeNow) return 1
+            if (a.endDateTime - timeNow > b.endDateTime - timeNow && b.startDateTime < timeNow && b.endDateTime > timeNow) return 1
+            if (a.endDateTime - timeNow > b.endDateTime - timeNow && a.startDateTime > timeNow && b.startDateTime > timeNow) return 1
+            else {
                 return -1
             }
         })
@@ -79,7 +69,6 @@ const EventsPage = props => {
     const openEvent = (id) => {
         props.history.push(`event/${id}`)
     }
-
     const renderEvent = () => {
         return (
             <ul>

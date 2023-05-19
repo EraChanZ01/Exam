@@ -12,7 +12,7 @@ const initialState = [
         notifiDateTime: 1681991400,
         id: 0,
         user: {
-            id: 1
+            id: 2
         },
         entries: [
             {
@@ -20,30 +20,30 @@ const initialState = [
                 text: "Gary",
                 status: 'pending',
                 user: {
-                    id: 2
+                    id: 1
                 },
             }
         ]
     },
     {
         name: "This will be the name of the event",
-        startDateTime: 1682165593,
+        startDateTime: 1684680061,
         endDateTime: 1687608000,
-        notifiDateTime: 1682165593,
+        notifiDateTime: 1684593661,
         id: 1,
         user: {
-            id: 1
+            id: 2
         },
         entries: []
     },
     {
         name: "This will be the name of the event",
-        startDateTime: 1681906393,
-        endDateTime: 1687435200,
-        notifiDateTime: 1681906393,
+        startDateTime: 1684593741,
+        endDateTime: 1687185741,
+        notifiDateTime: 1684507332,
         id: 2,
         user: {
-            id: 1
+            id: 2
         },
         entries: []
     },
@@ -54,14 +54,14 @@ const initialState = [
         notifiDateTime: 1681826222,
         id: 3,
         user: {
-            id: 1
+            id: 2
         },
         entries: [{
             id: '3-0',
             text: "Gary",
             status: 'pending',
             user: {
-                id: 2
+                id: 1
             },
         }]
     },
@@ -72,7 +72,7 @@ const initialState = [
         notifiDateTime: 1681909260,
         id: 4,
         user: {
-            id: 1
+            id: 2
         },
         entries: [
             {
@@ -80,7 +80,7 @@ const initialState = [
                 text: "Gary",
                 status: 'pending',
                 user: {
-                    id: 2
+                    id: 1
                 },
             },
             {
@@ -88,7 +88,7 @@ const initialState = [
                 text: "Poter",
                 status: 'pending',
                 user: {
-                    id: 2
+                    id: 1
                 },
             }
         ]
@@ -100,7 +100,7 @@ const initialState = [
         notifiDateTime: 1682944333,
         id: 5,
         user: {
-            id: 1
+            id: 2
         },
         entries: [
             {
@@ -108,7 +108,7 @@ const initialState = [
                 text: "Gary",
                 status: 'pending',
                 user: {
-                    id: 2
+                    id: 1
                 },
             }
         ]
@@ -122,7 +122,9 @@ const reducers = {
             startDateTime: payload.startDateTime,
             endDateTime: payload.endDateTime,
             notifiDateTime: payload.notifiDateTime,
-            id: state.length
+            id: state.length,
+            user: payload.user,
+            entries: []
         })
     },
     updateEvent: (state, { payload }) => {

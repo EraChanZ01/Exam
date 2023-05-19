@@ -58,7 +58,7 @@ const mapDispatchToProps = dispatch => ({
 
 })
 const mapStateToProps = state => {
-    const { isFetching, userStore } = state.userStore;
+    const { isFetching, userStore } = state;
     return { isFetching, ...userStore };
 }
 

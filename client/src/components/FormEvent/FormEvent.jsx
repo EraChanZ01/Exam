@@ -5,6 +5,16 @@ import styles from './FormEvent.module.sass'
 
 
 const FormEvent = props => {
+    const currentDate = Date.now()
+    const validateData = (values) => {
+        const errors = {}
+        const dateTimeStart = new Date(values.startDate + 'T' + values.startTime).getTime()
+        const dateTimeNotifi = new Date(values.notificationDate + 'T' + values.notificationTime).getTime()
+        if (dateTimeStart < currentDate) errors.startDate = "Invalid event start date selected"
+        if (new Date(values.endDate).getTime() < currentDate + 86400000) errors.endDate = "Invalid event end date selected"
+        if (dateTimeNotifi >= dateTimeStart) errors.notificationDate = "Invalid event notification date selected"
+        return errors
+    }
     return (
         <div className={styles.formEvent}>
             <Formik
@@ -19,6 +29,7 @@ const FormEvent = props => {
                 }}
                 onSubmit={props.handleSubmit}
                 innerRef={props.formRef}
+                validate={validateData}
             >
                 <Form>
                     <div className={styles.formItem}>
@@ -89,7 +100,7 @@ const FormEvent = props => {
                         <h1>Select the time for event notification</h1>
                         <div className={styles.notificationForm}>
                             <FormInput
-                                name="notifiDate"
+                                name="notificationDate"
                                 type="date"
                                 label="notification Date"
                                 classes={{
@@ -100,7 +111,7 @@ const FormEvent = props => {
                                 }}
                             />
                             <FormInput
-                                name="notifiTime"
+                                name="notificationTime"
                                 type="time"
                                 label="notification Time"
                                 classes={{
