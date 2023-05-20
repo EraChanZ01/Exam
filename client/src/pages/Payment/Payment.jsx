@@ -15,7 +15,7 @@ const Payment = (props) => {
       contestArray.push({ ...contests[key] })
     );
     for (let i = 0; i < contestArray.length; i++) {
-      contestArray[i].haveFile = !!contestArray[i].files;
+      contestArray[i].haveFile = !!contestArray[i].files.length > 1;
     }
     const data = {
       ...values,
