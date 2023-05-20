@@ -3,15 +3,11 @@ import styles from "./QuestionsCards.module.sass"
 
 
 const QuestionsCards = ({ question, answer, id }) => {
-
-
     const handleClick = ({ target }) => {
         let ourContent = document.getElementById(id)
-        if (ourContent.style.maxHeight) {
-            document.querySelectorAll(`.${styles.cardSection}`).forEach(el => el.style.maxHeight = null)
-            document.querySelectorAll(`.${styles.small}`).forEach(el => el.style.transform = "rotate(0deg)")
-        } else {
-            document.querySelectorAll(`.${styles.cardSection}`).forEach(el => el.style.maxHeight = null)
+        document.querySelectorAll(`.${styles.cardSection}`).forEach(el => el.style.maxHeight = null)
+        document.querySelectorAll(`.${styles.small}`).forEach(el => el.style.transform = "rotate(0deg)")
+        if (!ourContent.style.maxHeight) {
             document.getElementById(`small${id}`).style.transform = "rotate(90deg)"
             ourContent.style.maxHeight = ourContent.scrollHeight + 'px'
         }
@@ -20,7 +16,7 @@ const QuestionsCards = ({ question, answer, id }) => {
         if (answer instanceof Array) {
             return (
                 <>
-                    {answer.map(el => <p>{el}</p>)}
+                    {answer.map((el, index) => <p key={index + 'A'}>{el}</p>)}
                 </>
             )
         }
@@ -34,7 +30,7 @@ const QuestionsCards = ({ question, answer, id }) => {
                 </>
             )
         }
-        
+
         return answer
     }
     return (

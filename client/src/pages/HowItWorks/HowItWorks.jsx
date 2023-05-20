@@ -20,18 +20,14 @@ const HowItWorks = props => {
         for (let i = 0; i < arrayRules.length; i++) {
             let additional
             if (i == 0) {
-                console.log(1)
                 additional = "startRule"
             }
             if (i > 0 && i < arrayRules.length - 1) {
-                console.log(2)
                 additional = "centerRule"
             }
             if (i == arrayRules.length - 1) {
-                console.log(3)
                 additional = "endRule"
             }
-            console.log(additional)
             arrayRules[i] = (
                 <li className={`${styles.ruleBlock} ${styles[additional]}`} key={i}>
                     <div className={styles.media}>

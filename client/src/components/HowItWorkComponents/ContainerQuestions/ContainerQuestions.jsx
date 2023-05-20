@@ -24,7 +24,7 @@ const ContainerQuestions = props => {
                                 if (ind == 0) {
                                     return
                                 }
-                                return <QuestionsCards question={element.question} answer={element.answer} id={`${index}-${ind}`} />
+                                return <QuestionsCards question={element.question} key={ind} answer={element.answer} id={`${index}-${ind}`} />
                             }
                             )
                         }
