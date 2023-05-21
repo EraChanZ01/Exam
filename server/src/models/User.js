@@ -4,15 +4,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      console.log(models)
-      /*
-      User.hasMany(models.Order, {
-        foreignKey: 'user_id', targetKey: 'id'
-      });
-      User.hasMany(models.RefreshToken, {
-        foreignKey: 'user_id', targetKey: 'id'
-      });
-      */
       User.hasMany(models.Ratings, {
         foreignKey: 'userId', targetKey: 'id'
       });
