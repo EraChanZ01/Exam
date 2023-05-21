@@ -165,7 +165,7 @@ class Header extends React.Component {
                   />
                   <ul>
                     <li>
-                      <a href="http://www.google.com">HOW IT WORKS</a>
+                      <a href="/how-it-works">HOW IT WORKS</a>
                     </li>
                     <li>
                       <a href="http://www.google.com">PRICING</a>
