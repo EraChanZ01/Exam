@@ -1,0 +1,60 @@
+.componentInputContainer
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-content: center
+    position: relative
+    margin: 10px 10px 10px 0px
+
+.warning
+    font-size: 18px
+    display: flex
+    justify-content: center
+    align-items: center
+    border: 2px solid #b72522
+    border-radius: 4px
+    padding: 3px 20px
+    color: #333
+
+.input
+    width: 100%
+    height: 46px
+    box-sizing: border-box
+    box-shadow: none
+    display: flex
+    align-items: center
+    font-size: 18px
+    background-color: white
+    border: 2px solid #d0d0d0
+    border-radius: 4px
+    cursor: text
+    outline: none
+    padding: 0 10px
+    color: #555
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+    @media(max-width: 700px)
+        width: auto
+
+    &:focus
+        border: 2px solid #28d2d0
+
+.formEvent
+    padding: 0px 10px 0px 10px
+    width: 40%
+    font-size: 20px
+    font-weight: 600
+    color: #585859
+    @media(max-width: 1250px)
+        width: 60% 
+    @media(max-width: 630px)
+        width: 305px    
+    .formItem
+        margin-bottom: 40px
+
+        .notificationForm
+            display: flex
+
+        .formEndsTime
+            display: flex
+        .formStartTime
+            display: flex

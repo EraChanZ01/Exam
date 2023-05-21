@@ -14,14 +14,17 @@ import OnlyNotAuthorizedUserHoc from './components/OnlyNotAuthorizedUserHoc/Only
 import ContestPage from './pages/ContestPage/ContestPage';
 import HowItWorks from './pages/HowItWorks/HowItWorks'
 import UserProfile from './pages/UserProfile/UserProfile';
+import EventsPage from './pages/EventsPage/EventsPage'
+import EventCreationPage from "./pages/EventCreationPage/EventCreationPage"
 import 'react-toastify/dist/ReactToastify.css';
 import ContestCreationPage from './pages/ContestCreation/ContestCreationPage';
 import CONSTANTS from './constants';
 import browserHistory from './browserHistory';
+import EventById from './pages/EventById/EventById'
 import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatContainer';
 
 class App extends Component {
-  render () {
+  render() {
     return (
       <Router history={browserHistory}>
         <ToastContainer
@@ -83,6 +86,13 @@ class App extends Component {
             path='/contest/:id'
             component={PrivateHoc(ContestPage)}
           />
+          <Route
+          exact
+          path='/event/:id'
+          component={PrivateHoc(EventById)}
+          />
+          <Route exact path="/events" component={PrivateHoc(EventsPage)} />
+          <Route exact path="/events/nameEvent" component={PrivateHoc(EventCreationPage)} />
           <Route exact path='/account' component={PrivateHoc(UserProfile)} />
           <Route exact path='/how-it-works' component={HowItWorks} />
           <Route component={NotFound} />
