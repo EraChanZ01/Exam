@@ -86,7 +86,7 @@ const initialState = [
             {
                 id: '4-1',
                 text: "Poter",
-                status: 'pending',
+                status: "won",
                 user: {
                     id: 1
                 },
@@ -106,7 +106,7 @@ const initialState = [
             {
                 id: '5-0',
                 text: "Gary",
-                status: 'pending',
+                status: "won",
                 user: {
                     id: 1
                 },

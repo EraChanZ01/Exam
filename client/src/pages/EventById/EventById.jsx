@@ -125,7 +125,8 @@ const EventById = props => {
                         </div>
                         {props.data.role === CONSTANTS.CUSTOMER &
                             props.eventStore[params.id].user.id === props.data.id &
-                            el.status === "pending" ?
+                            el.status === "pending" &
+                            props.eventStore[params.id].endDateTime > ~~(Date.now() / 1000) ?
                             <div className={styles.solution}>
                                 <button className={styles.resolve} onClick={() => handleClickResolve(el.id)}>Resolve</button>
                                 <button className={styles.reject} onClick={() => handleClickReject(el.id)}>Reject</button>
@@ -146,7 +147,7 @@ const EventById = props => {
                     <Header />
                     <div className={styles.sectionEntries}>
                         <h1>{props.eventStore[params.id].name}</h1>
-                        {props.data.role === CONSTANTS.CUSTOMER ||
+                        {props.data.role !== CONSTANTS.CREATOR ||
                             props.eventStore[params.id].endDateTime <= ~~(Date.now() / 1000) ||
                             props.eventStore[params.id].startDateTime > ~~(Date.now() / 1000) ?
                             null
