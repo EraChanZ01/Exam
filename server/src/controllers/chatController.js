@@ -85,9 +85,9 @@ module.exports.addMessage = async (req, res, next) => {
 
 module.exports.getChat = async (req, res, next) => {
   try {
-    let messages
-    console.log(req.tokenData.userId,req.body)
-    const conversation = await db.Conversations.findOne({
+    let messages = []
+    console.log(req.tokenData.userId, req.body)
+    const conversations = await db.Conversations.findAll({
       include: [
         {
           model: db.Users,
@@ -100,15 +100,16 @@ module.exports.getChat = async (req, res, next) => {
       ],
     });
     const interlocutor = await userQueries.findUser(req.body.interlocutorId);
-    console.log(conversation)
-    if (conversation && conversation.Users.length === 2) {
-      messages = await db.Messages.findAll({
-        where: {
-          conversationId: conversation.id
+    if (conversations) {
+      for (let i = 0; i < conversations.length; i++) {
+        if (conversations[i].Users.length === 2) {
+          messages = await db.Messages.findAll({
+            where: {
+              conversationId: conversations[i].id
+            }
+          })
         }
-      })
-    } else {
-      messages = []
+      }
     }
     res.send({
       messages,
