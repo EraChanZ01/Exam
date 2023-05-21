@@ -17,7 +17,8 @@ routerContest.post('/setOfferStatus', basicMiddlewares.onlyForCustomerWhoCreateC
 routerContest.post('/setNewOffer', upload.uploadLogoFiles, basicMiddlewares.canSendOffer, contestController.setNewOffer);
 routerContest.post('/uploadFiles', upload.uploadContestFiles, contestController.uploadFiles)
 routerContest.get('/downloadFile/:fileName', contestController.downloadFile);
-
+routerContest.post('/getOffers', contestController.getOffers)
+routerContest.post('/setOfferModerStatus', basicMiddlewares.onlyForModerator, contestController.setOfferModerStatus)
 
 
 module.exports = routerContest;

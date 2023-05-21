@@ -15,12 +15,12 @@ const Payment = (props) => {
       contestArray.push({ ...contests[key] })
     );
     for (let i = 0; i < contestArray.length; i++) {
-      contestArray[i].haveFile = !!contestArray[i].files.length > 1;
+      contestArray[i].haveFile = !!contestArray[i].files.length > 0;
     }
     const data = {
       ...values,
       contests: JSON.stringify(contestArray),
-      price:'100'
+      price: '100'
     }
     props.pay({
       data,

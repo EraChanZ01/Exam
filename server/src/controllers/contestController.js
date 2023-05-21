@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Op } = require("sequelize");
 const ServerError = require('../errors/ServerError');
 const contestQueries = require('./queries/contestQueries');
 const userQueries = require('./queries/userQueries');
@@ -15,7 +16,7 @@ module.exports.dataForContest = async (req, res, next) => {
     const characteristics = await db.Selects.findAll({
       where: {
         type: {
-          [db.Sequelize.Op.or]: types,
+          [Op.or]: types,
         },
       },
     });
@@ -59,7 +60,11 @@ module.exports.getContestById = async (req, res, next) => {
           required: false,
           where: req.tokenData.role === CONSTANTS.CREATOR
             ? { userId: req.tokenData.userId }
-            : {},
+            : {
+              status: {
+                [Op.or]: [CONSTANTS.OFFER_STATUS_RESOLVE, CONSTANTS.OFFER_STATUS_WON]
+              }
+            },
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
             {
@@ -105,10 +110,10 @@ module.exports.uploadFiles = async (req, res, next) => {
   try {
     const { files } = req
     const arrayFiles = files.map(file => ({
-       fileName: file.filename,
-       destination: file.destination,
-       originalName:file.originalname
-      }))
+      fileName: file.filename,
+      destination: file.destination,
+      originalName: file.originalname
+    }))
     res.send(arrayFiles)
   } catch (err) {
     next(new ServerError());
@@ -280,3 +285,54 @@ module.exports.getContests = (req, res, next) => {
       next(new ServerError());
     });
 };
+
+module.exports.getOffers = async (req, res, next) => {
+  try {
+    const result = await db.Offers.findAll({
+      limit: req.body.limit,
+      offset: req.body.offset ? req.body.offset : 0,
+      include: [
+        {
+          model: db.Users,
+          required: true,
+          attributes: {
+            exclude: [
+              'password',
+              'role',
+              'balance',
+              'accessToken',
+            ],
+          },
+        },
+      ]
+    })
+    res.send(result)
+  } catch (err) {
+    next(new ServerError(err))
+  }
+}
+module.exports.setOfferModerStatus = async (req, res, next) => {
+  if (req.body.status === CONSTANTS.OFFER_STATUS_RESOLVE) {
+    try {
+      const resolveOffer = await contestQueries.updateOffer(
+        { status: CONSTANTS.OFFER_STATUS_RESOLVE }, { id: req.body.offerId });
+      const user = await userQueries.findUser({ id: req.body.creatorId });
+      controller.getNotificationController().emitChangeOfferStatus(req.body.creatorId, 'Someone of your offers WIN', req.body.contestId);
+      await userQueries.sendEmail(user.email, "moderator resolve your offer", "Squadhelp <michaela99@ethereal.email>")
+      res.send({ offer: resolveOffer, user })
+    } catch (err) {
+      next(new ServerError(err))
+    }
+  } else if (req.body.status === CONSTANTS.OFFER_STATUS_REJECTED) {
+    try {
+      const offer = await rejectOffer(req.body.offerId, req.body.creatorId,
+        req.body.contestId);
+      const user = await userQueries.findUser({ id: req.body.creatorId });
+      await userQueries.sendEmail(user.email, "moderator rejected your offer", "Squadhelp <michaela99@ethereal.email>")
+      res.send({ offer, user })
+    } catch (err) {
+      next(new ServerError(err))
+    }
+  }
+
+}
