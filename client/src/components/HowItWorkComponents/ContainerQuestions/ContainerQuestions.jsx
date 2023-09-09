@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import QuestionsCards from "../QuestionsCards/QuestionsCards"
 import CONSTANTS from '../../../constants';
 import styles from './ContainerQuestions.module.sass'
@@ -21,8 +21,8 @@ const ContainerQuestions = props => {
                     <div className={styles.relatedQuestions}>
                         {
                             item.map((element, ind) => {
-                                if (ind == 0) {
-                                    return
+                                if (ind === 0) {
+                                    return null;
                                 }
                                 return <QuestionsCards question={element.question} key={ind} answer={element.answer} id={`${index}-${ind}`} />
                             }

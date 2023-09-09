@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { connect } from 'react-redux';
-import BundleBox from "../../components/BundleBox/BundleBox"
 import { updateBundle } from '../../store/slices/bundleSlice';
 import styles from "./EventsPage.module.sass"
 import Header from "../../components/Header/Header";
@@ -17,7 +16,7 @@ const EventsPage = props => {
     const nowTime = ~~(new Date().getTime() / 1000)
 
     const renderTimeAndStyle = () => {
-        if (window.location.pathname != "/events") {
+        if (window.location.pathname !== "/events") {
             return clearInterval(intervalId)
         }
         const subtractTime = (timeEvent, now) => {
@@ -36,7 +35,7 @@ const EventsPage = props => {
             component.append(spanElem)
         }
         const element = [...document.getElementsByClassName("eventLi")]
-        if (element.length != 0) {
+        if (element.length !== 0) {
             element.forEach(event => {
                 const { startDateTime, endDateTime } = props.eventStore[event.id]
                 if (endDateTime < nowTime) return renderConponent(`${props.eventStore[event.id].entries.length} Entries`, "#FF8587", event)
@@ -86,7 +85,7 @@ const EventsPage = props => {
     let intervalId
     useEffect(() => {
         renderTimeAndStyle()
-    }, [event]);
+    }, [event, renderTimeAndStyle]);
     useEffect(() => {
         sortEvent([...props.eventStore])
         intervalId = setInterval(() => {

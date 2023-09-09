@@ -71,7 +71,7 @@ const EventById = props => {
                         <div className={styles.container}>
                             <div className={styles.entrieCreater}>
                                 <div className={styles.createrInfo}>
-                                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}anonym.png`} />
+                                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}anonym.png`} alt=""/>
                                     <div className={styles.additionalInfo}>
                                         <div>User</div>
                                         <span>User@gmail.com</span>
@@ -104,17 +104,17 @@ const EventById = props => {
                             <div className={styles.entrieContent}>{el.text ? (
                                 el.text
                             ) : (
-                                <img src={`${CONSTANTS.STATIC_IMAGES_PATH}${el.fileName}`} />
+                                <img src={`${CONSTANTS.STATIC_IMAGES_PATH}${el.fileName}`} alt="file"/>
                             )}
                             </div>
                             {el.status === "won" ? (
                                 <div className={styles.entrieGradeGreen}>
-                                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}check.png`} />
+                                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}check.png`}  alt=""/>
                                 </div>
                             ) : (
                                 el.status === "rejected" ? (
                                     <div className={styles.entrieGradeRed}>
-                                        <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cross.png`} />
+                                        <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cross.png`} alt=""/>
                                     </div>
                                 ) : (
                                     <div className={styles.entrieGrade}>

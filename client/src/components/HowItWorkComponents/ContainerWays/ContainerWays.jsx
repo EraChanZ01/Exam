@@ -25,7 +25,7 @@ const ContainerWays = () => {
         for (let i = 0; i < arrayCards.length; i++) {
             arrayCards[i] = (
                 <div className={styles.card} key={i}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}${arrayCards[i].img}`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}${arrayCards[i].img}`} alt="" />
                     <div className={styles.sectionInfo}>
                         <h1 className={styles.tagLine}>{arrayCards[i].tagLine}</h1>
                         <p className={styles.text}>{arrayCards[i].text}</p>

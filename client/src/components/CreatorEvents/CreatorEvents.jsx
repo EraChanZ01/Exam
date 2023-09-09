@@ -9,7 +9,7 @@ const CreatorEvents = ({ renderEvent, classes }) => {
             <div className={classes.eventBox}>
                 <div className={classes.eventHeader}>
                     <h1>Event List</h1>
-                    <p>Remaining time <img src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`} /></p>
+                    <p>Remaining time <img src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`} alt="clock" /></p>
                 </div>
                 <div className={classes.eventList}>
                     {renderEvent()}

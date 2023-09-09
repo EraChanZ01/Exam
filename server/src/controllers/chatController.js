@@ -86,7 +86,6 @@ module.exports.addMessage = async (req, res, next) => {
 module.exports.getChat = async (req, res, next) => {
   try {
     let messages = []
-    console.log(req.tokenData.userId, req.body)
     const conversations = await db.Conversations.findAll({
       include: [
         {

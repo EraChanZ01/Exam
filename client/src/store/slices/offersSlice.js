@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as restController from '../../api/rest/restController';
 import {
-    decorateAsyncThunk,
-    rejectedReducer,
-    createExtraReducers,
+    decorateAsyncThunk
 } from '../../utils/store';
 
 const SLICE_NAME = 'offers';

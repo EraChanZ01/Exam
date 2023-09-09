@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux';
 import BundleBox from "../BundleBox/BundleBox"
 import { updateBundle } from '../../store/slices/bundleSlice';
@@ -42,7 +42,7 @@ const CustomerEvents = ({ renderEvent, history, classes, choseBundle, renderTime
             <div className={classes.eventBox}>
                 <div className={classes.eventHeader}>
                     <h1>Event List</h1>
-                    <p>Remaining time<img src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`}/></p>
+                    <p>Remaining time<img src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`} alt='clock'/></p>
                 </div>
                 <div className={classes.eventList}>
                     {renderEvent()}

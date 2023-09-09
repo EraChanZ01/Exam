@@ -129,7 +129,7 @@ const reducers = {
     },
     updateEvent: (state, { payload }) => {
         state.forEach((element, index) => {
-            if (payload.eventId == element.id) {
+            if (payload.eventId === element.id) {
                 state[element.id].entries.push({
                     id: `${element.id}-${element.entries.length}`,
                     text: payload.text,

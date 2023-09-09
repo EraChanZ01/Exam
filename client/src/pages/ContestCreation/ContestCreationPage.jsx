@@ -18,7 +18,7 @@ const ContestCreationPage = (props) => {
   const handleSubmit = (values) => {
     const info = {}
     for (let prop in values) {
-      if (prop != 'file') {
+      if (prop !== 'file') {
         info[prop] = values[prop]
       }
       else {

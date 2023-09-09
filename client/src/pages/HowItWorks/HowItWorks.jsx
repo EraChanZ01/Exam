@@ -19,13 +19,13 @@ const HowItWorks = props => {
         ]
         for (let i = 0; i < arrayRules.length; i++) {
             let additional
-            if (i == 0) {
+            if (i === 0) {
                 additional = "startRule"
             }
             if (i > 0 && i < arrayRules.length - 1) {
                 additional = "centerRule"
             }
-            if (i == arrayRules.length - 1) {
+            if (i === arrayRules.length - 1) {
                 additional = "endRule"
             }
             arrayRules[i] = (
@@ -60,20 +60,17 @@ const HowItWorks = props => {
                     </button>
                 </div>
                 <div className={styles.partImage}>
-                    <img
-                        src={`${CONSTANTS.STATIC_IMAGES_PATH}app-user.png`}
-                        alt='image user phone'
-                    />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}app-user.png`} alt="" />
                 </div>
             </div>
             <ContainerWays />
             <div className={styles["container-3"]}>
                 <div className={styles.titleBlock}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cup.png`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cup.png`} alt="cup" />
                     <h1 className={styles.tagLine}>How Do Naming Contests Work?</h1>
                 </div>
                 <div className={styles.sectionRules}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}user1.png`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}user1.png`} alt="user" />
                     <div className={styles.mainBlockRules}>
                         <ul className={styles.wrapRules}>
                             {renderRulesContestsNaming()}
@@ -88,20 +85,20 @@ const HowItWorks = props => {
                     <p>Fill out your contest brief and begin receiving custom name suggestions within minutes.</p>
                     <button className={styles.borderButton}>Start A Contest</button>
                 </div>
-                <img className={styles.figureOne} src={`${CONSTANTS.STATIC_IMAGES_PATH}figure-1.png`} />
-                <img className={styles.figureTwo} src={`${CONSTANTS.STATIC_IMAGES_PATH}figure-2.png`} />
+                <img className={styles.figureOne} src={`${CONSTANTS.STATIC_IMAGES_PATH}figure-1.png`} alt="figure" />
+                <img className={styles.figureTwo} src={`${CONSTANTS.STATIC_IMAGES_PATH}figure-2.png`} alt="figure" />
             </div>
             <div className={styles.containerAchiev}>
                 <div className={styles.achiev}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}stars.svg`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}stars.svg`} alt="stars" />
                     <span><p>4.9 out of 5 stars </p>from 25,000+ customers.</span>
                 </div>
                 <div className={`${styles.achiev} ${styles.achievCenter}`}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}img222.webp`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}img222.webp`} alt="" />
                     <span>Our branding community stands <p>200,000+</p> strong.</span>
                 </div>
                 <div className={styles.achiev}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}sharing-files.svg`} />
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}sharing-files.svg`} alt="" />
                     <span><p>140+ Industries </p>supported across more than <p>85 countries </p>– and counting.</span>
                 </div>
             </div>

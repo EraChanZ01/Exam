@@ -14,7 +14,7 @@ const ModeratorDashboard = props => {
 
     useEffect(() => {
         getOffers(props.offers.data.length)
-    }, [])
+    }, [props.offers.data])
 
     const getOffers = (startFrom) => {
         props.getOffers({
@@ -71,19 +71,19 @@ const ModeratorDashboard = props => {
 
     const renderOffers = () => {
         return props.offers.data.map((offer, index) => {
-            const { User: { firstName, lastName, displayName, avatar, email } } = offer
+            const { User: { firstName, lastName, avatar, email } } = offer
             return (
                 <div className={styles.sectionOffer} key={index}>
                     {offerStatus(offer.status)}
                     <div className={styles.containerHeader}>
                         <div className={styles.containerUser}>
-                            <img src={`${CONSTANTS.publicURL}${avatar}`} />
+                            <img src={`${CONSTANTS.publicURL}${avatar}`} alt="user`s avatar"/>
                             <div className={styles.addInfoUser}>
                                 <div className={styles.firstName}>{firstName}<span className={styles.lastName}>{lastName}</span></div>
                                 <div className={styles.email}>{email}</div>
                             </div>
                         </div>
-                        {offer.text ? <div className={styles.offer}>{offer.text}</div> : <img className={styles.offer} src={`${CONSTANTS.publicURL}${offer.fileName}`} />}
+                        {offer.text ? <div className={styles.offer}>{offer.text}</div> : <img className={styles.offer} src={`${CONSTANTS.publicURL}${offer.fileName}`} alt="file"/>}
                         <div></div>
                     </div>
                     <div className={styles.btnsContainer}>
