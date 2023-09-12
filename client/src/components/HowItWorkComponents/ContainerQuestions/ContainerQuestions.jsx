@@ -7,6 +7,11 @@ import styles from './ContainerQuestions.module.sass'
 const ContainerQuestions = props => {
     const { HowItWorks: { questionsCardsItem } } = CONSTANTS
 
+    const handelClick = (id) => {
+        const element = document.getElementById(id)
+        window.scrollTo(0, element.offsetTop)
+    }
+
     const createQuestionCards = () => {
         const newQuestionsCards = []
         Object.keys(questionsCardsItem).forEach((key) => {
@@ -14,9 +19,9 @@ const ContainerQuestions = props => {
         })
         return (
             newQuestionsCards.map((item, index) => (
-                <div key={index} className={`${styles.mainBlockQuestion} BlockQuestion-${index}`}>
-                    <div className={styles.placeTitle}>
-                        <h1 className={styles.questionTitle}>{item[0]}</h1>
+                <div key={index} className={`${styles.mainBlockQuestion} BlockQuestion-${index}`} id={index}>
+                    <div className={styles.placeTitle} >
+                        <p className={styles.questionTitle}>{item[0]}</p>
                     </div>
                     <div className={styles.relatedQuestions}>
                         {
@@ -39,10 +44,10 @@ const ContainerQuestions = props => {
         <div className={styles["container-4"]}>
             <div className={styles.placeBoard}>
                 <div className={styles.board}>
-                    <p>Launching A Contest</p>
-                    <p>Buying From Marketplace</p>
-                    <p>Managed Contests</p>
-                    <p>For Creatives</p>
+                    <p onClick={() => handelClick(0)}>Launching A Contest</p>
+                    <p onClick={() => handelClick(1)}>Buying From Marketplace</p>
+                    <p onClick={() => handelClick(2)}>Managed Contests</p>
+                    <p onClick={() => handelClick(3)}>For Creatives</p>
                 </div>
             </div>
             <div className={styles.placeQuestion}>

@@ -27,7 +27,7 @@ const ContainerWays = () => {
                 <div className={styles.card} key={i}>
                     <img src={`${CONSTANTS.STATIC_IMAGES_PATH}${arrayCards[i].img}`} alt="" />
                     <div className={styles.sectionInfo}>
-                        <h1 className={styles.tagLine}>{arrayCards[i].tagLine}</h1>
+                        <h2 className={styles.tagLine}>{arrayCards[i].tagLine}</h2>
                         <p className={styles.text}>{arrayCards[i].text}</p>
                     </div>
                     <button className={styles.buttonCards}>
@@ -43,7 +43,7 @@ const ContainerWays = () => {
         <div className={styles["container-2"]}>
             <div className={styles.blockTitle}>
                 <span className={styles["title-1"]}>Our Services</span>
-                <h1 className={styles["title-2"]}>3 Ways To Use Squadhelp</h1>
+                <h2 className={styles["title-2"]}>3 Ways To Use Squadhelp</h2>
                 <p className={styles["title-3"]}>Squadhelp offers 3 ways to get you a perfect name for your business.</p>
             </div>
             <div className={styles.mainBlockCards}>

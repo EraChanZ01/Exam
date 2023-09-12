@@ -3,14 +3,21 @@
     padding: 0px 10px 50px 10px
     margin: 150px 17% 0px 17%
     display: flex
+    @media (max-width: 990px)
+        display: block
 
 .placeQuestion
     padding: 0px 10px 0px 10px
     width: 75%
+    @media (max-width: 990px)
+        width: 100%
 
     .mainBlockQuestion
         padding: 70px 0px 70px 0px
         border-bottom: 1px solid rgb(207, 207, 207)
+
+        .relatedQuestions
+            width: 100%
 
         .placeTitle
             margin-bottom: 20px
@@ -22,12 +29,16 @@
 
 .placeBoard
     width: 25%
-    padding: 70px 10px 0px 10px
+    padding: 70px 0px 0px 0px
+    @media (max-width: 990px)
+        width: 100%
 
     .board
         background-color: rgb(89, 117, 255)
         border-radius: 5px
         padding: 30px
+        @media (max-width: 990px)
+            padding: 20px
 
         p
             font-size: 15px

@@ -47,7 +47,7 @@ const HowItWorks = props => {
                 <div className={styles.partText}>
                     <span className={styles.title}>World's #1 Naming Platform</span>
                     <div className={styles.mainBlock}>
-                        <h1 className={styles.headline}>How Does Squadhelp Work?</h1>
+                        <p className={styles.headline}>How Does Squadhelp Work?</p>
                         <div className={styles.text}>Squadhelp helps you come up with a great name for your business by combining the power of
                             crowdsourcing with sophisticated technology and Agency-level validation services.
                         </div>
@@ -67,21 +67,21 @@ const HowItWorks = props => {
             <div className={styles["container-3"]}>
                 <div className={styles.titleBlock}>
                     <img src={`${CONSTANTS.STATIC_IMAGES_PATH}cup.png`} alt="cup" />
-                    <h1 className={styles.tagLine}>How Do Naming Contests Work?</h1>
+                    <p className={styles.tagLine}>How Do Naming Contests Work?</p>
                 </div>
                 <div className={styles.sectionRules}>
-                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}user1.png`} alt="user" />
                     <div className={styles.mainBlockRules}>
                         <ul className={styles.wrapRules}>
                             {renderRulesContestsNaming()}
                         </ul>
                     </div>
+                    <img src={`${CONSTANTS.STATIC_IMAGES_PATH}user1.png`} alt="user" />
                 </div>
             </div>
             <ContainerQuestions />
             <div className={styles.borderStart}>
                 <div className={styles.borderInfo}>
-                    <h1>Ready to get started?</h1>
+                    <h3>Ready to get started?</h3>
                     <p>Fill out your contest brief and begin receiving custom name suggestions within minutes.</p>
                     <button className={styles.borderButton}>Start A Contest</button>
                 </div>

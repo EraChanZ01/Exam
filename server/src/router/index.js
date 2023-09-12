@@ -6,10 +6,10 @@ const routerChat = require('./routerChat')
 const router = express.Router();
 
 
-router.use(routerAuth)
-router.use(routerContest)
-router.use(routerUser)
-router.use(routerChat)
+router.use('/auth',routerAuth)
+router.use('/contest', routerContest)
+router.use('/user',routerUser)
+router.use('/chat',routerChat)
 
 
 module.exports = router;
