@@ -1,8 +1,16 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import CONSTANTS from "../../constants"
+import EventComponent from '../EventComponent/EventComponent'
 
 
-const CreatorEvents = ({ renderEvent, classes }) => {
+const CreatorEvents = ({ arrayEvents, classes, history }) => {
+
+    const [events, setEvents] = useState(arrayEvents)
+
+    useEffect(() => {
+
+        setEvents(arrayEvents)
+    }, [arrayEvents])
 
     return (
         <div className={classes.eventContainer}>
@@ -12,7 +20,12 @@ const CreatorEvents = ({ renderEvent, classes }) => {
                     <p>Remaining time <img src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`} alt="clock" /></p>
                 </div>
                 <div className={classes.eventList}>
-                    {renderEvent()}
+                    <ul>
+                        {events.map((event, index) => {
+                            if (event.notifiDateTime <= ~~(new Date().getTime() / 1000)) return <EventComponent key={index} event={event} history={history} />
+                        })
+                        }
+                    </ul>
                 </div>
             </div>
         </div>

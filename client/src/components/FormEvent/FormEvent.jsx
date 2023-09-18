@@ -10,7 +10,7 @@ const FormEvent = props => {
         const errors = {}
         const dateTimeStart = new Date(values.startDate + 'T' + values.startTime).getTime()
         const dateTimeNotifi = new Date(values.notificationDate + 'T' + values.notificationTime).getTime()
-        if (dateTimeStart < currentDate) errors.startDate = "Invalid event start date selected"
+        if (dateTimeStart < currentDate + 43200000) errors.startDate = "Invalid event start date selected"
         if (new Date(values.endDate).getTime() < currentDate + 86400000) errors.endDate = "Invalid event end date selected"
         if (dateTimeNotifi >= dateTimeStart) errors.notificationDate = "Invalid event notification date selected"
         return errors
