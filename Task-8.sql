@@ -7,6 +7,8 @@ CREATE TABLE "Conversations" (
 CREATE TABLE "UsersInConversations" (
     userId int NOT NULL,
     conversationId int NOT NULL,
+    blackList boolean,
+    favoriteList boolean,
     createdAt date NOT NULL,
     updatedAt date NOT NULL,
     PRIMARY KEY (userId, conversationId),
@@ -26,20 +28,6 @@ CREATE TABLE "ConversationsInCatalogs"(
     PRIMARY KEY (catalogId, conversationId),
     FOREIGN KEY (CatalogId) REFERENCES public."Catalogs"(id),
     FOREIGN KEY (conversationId) REFERENCES public."Conversations"(id) ON DELETE CASCADE
-);
-CREATE TABLE "BlackLists" (
-    userId int NOT NULL,
-    participantId int NOT NULL,
-    PRIMARY KEY (userId, participantId),
-    FOREIGN KEY (userId) REFERENCES public."Users"(id),
-    FOREIGN KEY (participantId) REFERENCES public."Users"(id)
-);
-CREATE TABLE "FavoriteLists" (
-    userId int NOT NULL,
-    participantId int NOT NULL,
-    PRIMARY KEY (userId, participantId),
-    FOREIGN KEY (userId) REFERENCES public."Users"(id),
-    FOREIGN KEY (participantId) REFERENCES public."Users"(id)
 );
 CREATE TABLE "Messages" (
     id bigserial NOT NULL,

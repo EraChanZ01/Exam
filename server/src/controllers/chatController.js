@@ -12,8 +12,8 @@ module.exports.addMessage = async (req, res, next) => {
     const user = await db.Users.findOne({
       where: { id: req.tokenData.userId },
     });
-    const blackList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "BlackLists")
-    const favoriteList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "FavoriteLists")
+    //const blackList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "BlackLists")
+    //const favoriteList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "FavoriteLists")
     const conversation = await db.Conversations.findOne({
       include: [
         {
@@ -131,11 +131,18 @@ module.exports.getPreview = async (req, res, next) => {
       include: [
         {
           model: db.Users,
-          where: { id: req.tokenData.userId }
+          //where: { id: req.tokenData.userId }
+        },
+        {
+          model: db.Messages,
+          order: [['createdAt', 'DESC']],
+          attributes: [['body', 'text'], "id", "sender", "conversationId", ["createdAt", "createAt"]],
+          limit: 1
         }
       ]
     });
-    const lastMessagesPromis = conversations.map(async conver => {
+    console.log(conversations[0].dataValues.Messages)
+    /*const lastMessagesPromis = conversations.map(async conver => {
       const messages = await db.Messages.findAll({
         where: { conversationId: conver.id },
         order: [['createdAt', 'DESC']],
@@ -155,6 +162,7 @@ module.exports.getPreview = async (req, res, next) => {
         ]
       })
       const participants = []
+      
       for (let i = 0; i < users.length; i++) {
         if (users[i].id != req.tokenData.userId) {
           lastMessages[p].dataValues.blackList = await chatQueries.checkList(req.tokenData.userId, users[i].id, "BlackLists")
@@ -172,10 +180,11 @@ module.exports.getPreview = async (req, res, next) => {
         }
       }
       lastMessages[p].dataValues.participants = participants
-    }
-    res.send(lastMessages)
+    }*/
+    res.send(conversations)
   } catch (err) {
-    next(err)
+    console.log(err)
+    //next(err)
   }
 }
 

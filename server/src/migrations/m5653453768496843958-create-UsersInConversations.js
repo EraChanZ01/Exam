@@ -22,6 +22,12 @@ module.exports = {
           key: "id"
         }
       },
+      blackList: {
+        type: Sequelize.BOOLEAN,
+      },
+      favoriteList: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

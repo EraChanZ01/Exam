@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'sender', sourceKey: 'id'
       });
       User.belongsToMany(models.Conversations, {
-        through: 'UsersInConversations', foreignKey: 'userId'
+        through: models.UsersInConversations, foreignKey: 'userId'
       })
       User.hasMany(models.Catalogs, {
         foreignKey: 'userId', sourceKey: 'id'
       });
-      User.belongsToMany(models.Users, {
+      /*User.belongsToMany(models.Users, {
         foreignKey: 'userId', targetKey: 'id', through: 'Blacklists', as: "BlockingUsers"
       });
       User.belongsToMany(models.Users, {
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.belongsToMany(models.Users, {
         foreignKey: 'participantId', sourceKey: 'id', through: 'FavoriteLists', as: "FavoritedByUsers"
-      });
+      });*/
       User.hasMany(models.Ratings, {
         foreignKey: 'userId', targetKey: 'id'
       });

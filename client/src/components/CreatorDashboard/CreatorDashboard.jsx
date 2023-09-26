@@ -65,7 +65,7 @@ class CreatorDashboard extends React.Component {
         Choose industry
       </option>
     );
-    industry.forEach((industry, i) =>
+    industry?.forEach((industry, i) =>
       array.push(
         <option key={i + 1} value={industry}>
           {industry}
