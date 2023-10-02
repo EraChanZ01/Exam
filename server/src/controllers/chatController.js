@@ -12,36 +12,41 @@ module.exports.addMessage = async (req, res, next) => {
     const user = await db.Users.findOne({
       where: { id: req.tokenData.userId },
     });
-    //const blackList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "BlackLists")
-    //const favoriteList = await chatQueries.checkList(req.tokenData.userId, req.body.recipient, "FavoriteLists")
-    const conversation = await db.Conversations.findOne({
+
+    const conversation = await await db.Conversations.findOne({
+      where: {
+        id: req.body.conversationId
+      },
       include: [
         {
           model: db.Users,
-          where: {
-            id: {
-              [Sequelize.Op.in]: [req.tokenData.userId, req.body.recipient]
-            },
-          },
         },
       ],
-    });
+    })
+    const participants = new Array(2)
+    conversation.Users.forEach(user => {
+      if (user.id === req.body.recipient) participants[1] = user
+      else {
+        participants[0] = user
+      }
+    })
     const preview = {
-      sender: req.tokenData.userId,
+      sender: user.id,
       text: req.body.messageBody,
       participants: [req.tokenData.userId, req.body.recipient],
-      blackList,
-      favoriteList,
+      blackList: [participants[0].UsersInConversations.blackList, participants[1].UsersInConversations.blackList],
+      favoriteList: [participants[0].UsersInConversations.favoriteList, participants[1].UsersInConversations.favoriteList],
     };
-    if (conversation && conversation.Users.length === 2) {
+    if (conversation) {
       message = await db.Messages.create({
         conversationId: conversation.id,
         body: req.body.messageBody,
         sender: user.id
       })
       Object.assign(preview, { conversationId: conversation.id, createAt: message.createdAt })
-    }
-    else if (!conversation || conversation && conversation.Users.length != 2) {
+
+    } else {
+
       const recipient = await db.Users.findOne({ where: { id: req.body.recipient } })
       const newConversation = await db.Conversations.create()
       await newConversation.addUsers([user, recipient])
@@ -55,18 +60,19 @@ module.exports.addMessage = async (req, res, next) => {
         createAt: message.createdAt,
         interlocutor: req.body.interlocutor
       })
+
     }
-    message.dataValues.participants = [req.tokenData.userId, req.body.recipient]
+    message.dataValues.participants = [req.body.recipient, req.tokenData.userId]
     controller.getChatController().emitNewMessage(req.body.recipient, {
       message,
       preview: {
-        _id: preview.conversationId,
+        id: preview.conversationId,
         sender: req.tokenData.userId,
         text: req.body.messageBody,
         createAt: message.createdAt,
-        participants: [req.tokenData.userId, req.body.recipient],
-        blackList: blackList,
-        favoriteList: favoriteList,
+        participants: [req.body.recipient, req.tokenData.userId],
+        blackList: preview.blackList,
+        favoriteList: preview.favoriteList,
         interlocutor: {
           id: req.tokenData.userId,
           firstName: req.tokenData.firstName,
@@ -77,7 +83,12 @@ module.exports.addMessage = async (req, res, next) => {
         },
       },
     });
-    res.send({ message, preview: Object.assign(preview, { interlocutor: req.body.interlocutor }) })
+
+    res.send({
+      message: { ...message.dataValues, participants: [req.tokenData.userId, req.body.recipient], },
+      preview: Object.assign(preview, { interlocutor: req.body.interlocutor })
+    })
+
   } catch (err) {
     next(err)
   }
@@ -121,97 +132,83 @@ module.exports.getChat = async (req, res, next) => {
       },
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }
+
 module.exports.getPreview = async (req, res, next) => {
   try {
+
     const conversations = await db.Conversations.findAll({
       include: [
         {
           model: db.Users,
-          //where: { id: req.tokenData.userId }
-        },
-        {
-          model: db.Messages,
-          order: [['createdAt', 'DESC']],
-          attributes: [['body', 'text'], "id", "sender", "conversationId", ["createdAt", "createAt"]],
-          limit: 1
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken', 'rating']
+          }
         }
       ]
     });
-    console.log(conversations[0].dataValues.Messages)
-    /*const lastMessagesPromis = conversations.map(async conver => {
+    const lastMessagesPromis = conversations.map(async conver => {
       const messages = await db.Messages.findAll({
         where: { conversationId: conver.id },
         order: [['createdAt', 'DESC']],
         attributes: [['body', 'text'], "id", "sender", "conversationId", ["createdAt", "createAt"]],
         limit: 1
       })
+      const participants = conver.Users[0].id === req.tokenData.userId ? [conver.Users[0], conver.Users[1]] : [conver.Users[1], conver.Users[0]]
+      messages[0].dataValues.interlocutor = participants[1]
+      messages[0].dataValues.blackList = [participants[0].UsersInConversations.blackList, participants[1].UsersInConversations.blackList]
+      messages[0].dataValues.favoriteList = [participants[0].UsersInConversations.favoriteList, participants[1].UsersInConversations.favoriteList]
+      messages[0].dataValues.participants = [participants[0].id, participants[1].id]
       return messages[0]
     })
     const lastMessages = await Promise.all(lastMessagesPromis)
-    for (let p = 0; p < lastMessages.length; p++) {
-      const users = await db.Users.findAll({
-        include: [
-          {
-            model: db.Conversations,
-            where: { id: lastMessages[p].conversationId }
-          }
-        ]
-      })
-      const participants = []
-      
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].id != req.tokenData.userId) {
-          lastMessages[p].dataValues.blackList = await chatQueries.checkList(req.tokenData.userId, users[i].id, "BlackLists")
-          lastMessages[p].dataValues.favoriteList = await chatQueries.checkList(req.tokenData.userId, users[i].id, "FavoriteLists")
-          lastMessages[p].dataValues.interlocutor = {
-            id: users[i].dataValues.id,
-            firstName: users[i].dataValues.firstName,
-            lastName: users[i].dataValues.lastName,
-            displayName: users[i].dataValues.displayName,
-            avatar: users[i].dataValues.avatar,
-          }
-          participants.push(users[i].id)
-        } else {
-          participants.unshift(users[i].id)
-        }
-      }
-      lastMessages[p].dataValues.participants = participants
-    }*/
-    res.send(conversations)
+    res.send(lastMessages)
   } catch (err) {
-    console.log(err)
-    //next(err)
+    next(err)
   }
 }
 
 module.exports.blackList = async (req, res, next) => {
   try {
-    const blackList = await chatQueries.checkList(req.tokenData.userId, req.body.participants[1], "BlackLists")
-    const favoriteList = await chatQueries.checkList(req.tokenData.userId, req.body.participants[1], "FavoriteLists")
-    if (req.body.blackListFlag) {
-      await db.BlackLists.create({
-        userId: req.tokenData.userId,
-        participantId: req.body.participants[1]
-      })
-      blackList[0] = req.body.blackListFlag
-    }
-    else {
-      const userBlackList = await db.BlackLists.findOne({
-        where: { userId: req.tokenData.userId, participantId: req.body.participants[1] }
-      })
-      if (userBlackList) {
-        await db.BlackLists.destroy({
-          where: { userId: userBlackList.userId }
-        })
-        blackList[0] = false
+    const conversation = await db.Conversations.findOne({
+      where: { id: req.body.conversationId }
+    })
+    await db.UsersInConversations.update(
+      {
+        blackList: req.body.blackListFlag
+      },
+      {
+        where: {
+          conversationId: conversation.id,
+          userId: req.tokenData.userId
+        }
       }
-    }
+    )
+    const user = await db.UsersInConversations.findAll({
+      where: {
+        userId: {
+          [Sequelize.Op.in]: req.body.participants
+        },
+        conversationId: conversation.id
+      },
+      limit: 2
+    })
+    const participants = user[0].userId === req.tokenData.userId ? [user[0], user[1]] : [user[1], user[0]]
+    const blackList = [participants[0].blackList, participants[1].blackList]
+    const favoriteList = [participants[0].favoriteList, participants[1].favoriteList]
+
+    controller.getChatController().emitChangeBlockStatus(participants[0].userId, {
+      conversationId: conversation.id,
+      participants: [participants[0].userId, participants[1].userId],
+      blackList,
+      favoriteList
+    });
+
     res.send({
-      participants: req.body.participants,
+      conversationId: conversation.id,
+      participants: [participants[0].userId, participants[1].userId],
       blackList,
       favoriteList
     })
@@ -219,31 +216,40 @@ module.exports.blackList = async (req, res, next) => {
     next(err)
   }
 }
+
 module.exports.favoriteChat = async (req, res, next) => {
   try {
-    const blackList = await chatQueries.checkList(req.tokenData.userId, req.body.participants[1], "BlackLists")
-    const favoriteList = await chatQueries.checkList(req.tokenData.userId, req.body.participants[1], "FavoriteLists")
-    if (req.body.favoriteFlag) {
-      await db.FavoriteLists.create({
-        userId: req.tokenData.userId,
-        participantId: req.body.participants[1]
-      })
-      favoriteList[0] = req.body.favoriteFlag
-    }
-    else {
-      const userfavoriteList = await db.FavoriteLists.findOne({
-        where: { userId: req.tokenData.userId, participantId: req.body.participants[1] }
-      })
-      if (userfavoriteList) {
-        await db.FavoriteLists.destroy({
-          where: ({ userId: userfavoriteList.userId })
-        })
-      }
+    const conversation = await db.Conversations.findOne({
+      where: { id: req.body.conversationId }
+    })
 
-      favoriteList[0] = false
-    }
+    await db.UsersInConversations.update(
+      {
+        favoriteList: req.body.favoriteFlag
+      },
+      {
+        where: {
+          conversationId: conversation.id,
+          userId: req.tokenData.userId
+        }
+      }
+    )
+
+    const user = await db.UsersInConversations.findAll({
+      where: {
+        userId: {
+          [Sequelize.Op.in]: req.body.participants
+        },
+        conversationId: conversation.id
+      },
+      limit: 2
+    })
+    const participants = user[0].userId === req.tokenData.userId ? [user[0], user[1]] : [user[1], user[0]]
+    const blackList = [participants[0].blackList, participants[1].blackList]
+    const favoriteList = [participants[0].favoriteList, participants[1].favoriteList]
     res.send({
-      participants: req.body.participants,
+      conversationId: conversation.id,
+      participants: [participants[0].userId, participants[1].userId],
       blackList,
       favoriteList
     })

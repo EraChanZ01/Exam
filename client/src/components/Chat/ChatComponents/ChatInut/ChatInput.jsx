@@ -13,6 +13,7 @@ const ChatInput = (props) => {
       messageBody: values.message,
       recipient: props.interlocutor.id,
       interlocutor: props.interlocutor,
+      conversationId: props.chatData.conversationId,
     });
     resetForm();
   };
@@ -49,9 +50,9 @@ const ChatInput = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const { interlocutor } = state.chatStore;
+  const { interlocutor, chatData } = state.chatStore;
   const { data } = state.userStore;
-  return { interlocutor, data };
+  return { interlocutor, data, chatData };
 };
 
 const mapDispatchToProps = (dispatch) => ({

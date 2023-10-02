@@ -63,6 +63,7 @@ const ChatHeader = (props) => {
                   {
                     participants: chatData.participants,
                     favoriteFlag: !isFavorite(chatData, userId),
+                    conversationId:chatData.conversationId,
                   },
                   event
                 )
@@ -78,6 +79,7 @@ const ChatHeader = (props) => {
                   {
                     participants: chatData.participants,
                     blackListFlag: !isBlocked(chatData, userId),
+                    conversationId:chatData.conversationId,
                   },
                   event
                 )

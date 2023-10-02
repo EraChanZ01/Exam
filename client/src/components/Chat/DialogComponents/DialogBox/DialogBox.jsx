@@ -62,6 +62,7 @@ const DialogBox = props => {
               changeFavorite(
                 {
                   participants,
+                  conversationId,
                   favoriteFlag: !isFavorite,
                 },
                 event
@@ -77,6 +78,7 @@ const DialogBox = props => {
               changeBlackList(
                 {
                   participants,
+                  conversationId,
                   blackListFlag: !isBlocked,
                 },
                 event
