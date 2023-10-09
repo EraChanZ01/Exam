@@ -107,6 +107,7 @@ module.exports.payment = async (req, res, next) => {
   let transaction;
   try {
     transaction = await bd.sequelize.transaction();
+    console.log(req.body)
     await bankQueries.updateBankBalance({
       balance: bd.sequelize.literal(`
                 CASE
@@ -127,6 +128,7 @@ module.exports.payment = async (req, res, next) => {
       },
       transaction);
     const orderId = uuid();
+    console.log(22222222222)
     req.body.contests.forEach((contest, index) => {
       const prize = index === req.body.contests.length - 1 ? Math.ceil(
         req.body.price / req.body.contests.length)
@@ -140,10 +142,12 @@ module.exports.payment = async (req, res, next) => {
         prize,
       });
     });
+    console.log(333333333333333)
     await bd.Contests.bulkCreate(req.body.contests, transaction);
     transaction.commit();
     res.send();
   } catch (err) {
+    console.log(err)
     transaction.rollback();
     next(err);
   }

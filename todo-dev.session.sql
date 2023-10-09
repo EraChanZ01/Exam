@@ -25,4 +25,6 @@ DELETE FROM "UsersInConversations" WHERE "userId" = 2
 
 
 
-
+UPDATE "Banks"
+SET "expiry" = '11/22'
+WHERE "name" = 'SquadHelp'
